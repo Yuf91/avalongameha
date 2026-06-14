@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09111f">
+  <meta name="description" content="可離線使用的阿瓦隆角色抽籤與任務紀錄工具">
+  <title>亞瑟王的密令｜阿瓦隆抽籤</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="回到設定">
+      <span class="brand-mark">A</span>
+      <span>
+        <strong>亞瑟王的密令</strong>
+        <small>AVALON COMPANION</small>
+      </span>
+    </a>
+    <div class="topbar-actions">
+      <button class="icon-button" id="themeToggle" type="button" aria-label="切換淺色模式" title="切換淺色模式">
+        <span aria-hidden="true">☀</span>
+      </button>
+      <button class="icon-button" id="soundToggle" type="button" aria-label="切換音效" title="切換音效">
+        <span aria-hidden="true">♪</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="screen active" id="setupScreen">
+      <div class="hero">
+        <p class="eyebrow">THE RESISTANCE · AVALON</p>
+        <h1>忠誠藏於誓言，<br><em>真相隱於目光。</em></h1>
+        <p class="hero-copy">設定玩家與角色，將裝置依序傳遞。所有資料只留在這台裝置上。</p>
+      </div>
+
+      <div class="setup-grid">
+        <article class="panel player-panel">
+          <div class="section-heading">
+            <div>
+              <span class="step-number">01</span>
+              <h2>召集圓桌</h2>
+            </div>
+            <span class="count-badge"><b id="playerCountLabel">5</b> 位玩家</span>
+          </div>
+
+          <div class="counter" aria-label="玩家人數">
+            <button id="decreasePlayers" type="button" aria-label="減少玩家">−</button>
+            <div>
+              <strong id="playerCount">5</strong>
+              <span>PLAYERS</span>
+            </div>
+            <button id="increasePlayers" type="button" aria-label="增加玩家">＋</button>
+          </div>
+
+          <div class="faction-balance">
+            <div class="faction good">
+              <span class="faction-icon">♜</span>
+              <span><b id="goodCount">3</b> 忠誠陣營</span>
+            </div>
+            <div class="balance-bar"><i id="balanceFill"></i></div>
+            <div class="faction evil">
+              <span><b id="evilCount">2</b> 邪惡陣營</span>
+              <span class="faction-icon">♞</span>
+            </div>
+          </div>
+
+          <div class="name-heading">
+            <span>玩家順序與名稱</span>
+            <small>將按照 01、02、03 的順序發牌</small>
+          </div>
+          <div class="name-list" id="nameList"></div>
+        </article>
+
+        <article class="panel roles-panel">
+          <div class="section-heading">
+            <div>
+              <span class="step-number">02</span>
+              <h2>選擇角色</h2>
+            </div>
+            <button class="text-button" id="resetRoles" type="button">推薦配置</button>
+          </div>
+
+          <div class="role-section">
+            <p class="role-label good-label">忠誠陣營 <span>GOOD</span></p>
+            <div class="role-options" id="goodRoles"></div>
+          </div>
+
+          <div class="ornament"><span>✦</span></div>
+
+          <div class="role-section">
+            <p class="role-label evil-label">邪惡陣營 <span>EVIL</span></p>
+            <div class="role-options" id="evilRoles"></div>
+          </div>
+
+          <div class="role-summary" id="roleSummary"></div>
+        </article>
+      </div>
+
+      <div class="start-wrap">
+        <button class="primary-button" id="startGame" type="button">
+          <span>開始命運抽籤</span>
+          <small>BEGIN THE QUEST</small>
+        </button>
+        <p id="setupMessage" role="status"></p>
+      </div>
+    </section>
+
+    <section class="screen" id="passScreen">
+      <div class="ritual-card">
+        <p class="eyebrow">PASS THE DEVICE</p>
+        <div class="seal neutral">✦</div>
+        <p class="turn-count" id="turnCount">第 1 位／共 5 位</p>
+        <h2>請交給 <em id="currentPlayerName">玩家 1</em></h2>
+        <p>確認周圍沒有人看見螢幕後，再揭示你的身分。</p>
+        <button class="primary-button" id="revealRole" type="button">
+          <span>揭示我的身分</span>
+          <small>REVEAL MY DESTINY</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="screen" id="roleScreen">
+      <div class="role-reveal" id="roleReveal">
+        <p class="eyebrow">YOUR DESTINY</p>
+        <div class="seal" id="roleSeal">♜</div>
+        <p class="faction-title" id="factionTitle">忠誠陣營</p>
+        <h2 id="revealedRole">梅林</h2>
+        <p class="role-power" id="rolePower"></p>
+        <div class="knowledge-card">
+          <span>你所知道的情報</span>
+          <p id="roleKnowledge"></p>
+        </div>
+        <button class="primary-button" id="hideRole" type="button">
+          <span>我已記住，隱藏身分</span>
+          <small>CONCEAL &amp; CONTINUE</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="screen" id="gameScreen">
+      <div class="game-header">
+        <div>
+          <p class="eyebrow">THE QUEST BEGINS</p>
+          <h1>圓桌任務</h1>
+        </div>
+        <button class="outline-button" id="newGame" type="button">重新開局</button>
+      </div>
+
+      <div class="game-grid">
+        <article class="panel quest-panel">
+          <div class="section-heading">
+            <div>
+              <span class="step-number">03</span>
+              <h2>任務紀錄</h2>
+            </div>
+            <span class="score" id="scoreText">正義 0 · 邪惡 0</span>
+          </div>
+          <div class="quest-track" id="questTrack"></div>
+          <div class="quest-actions" id="questActions">
+            <button class="primary-button quest-vote-button" id="startQuestVote" type="button">
+              <span>開始任務投票</span>
+              <small>CHOOSE THE CHALICE</small>
+            </button>
+            <button class="primary-button quest-vote-button hidden" id="startAssassination" type="button">
+              <span>刺客指認梅林</span>
+              <small>ASSASSINATE MERLIN</small>
+            </button>
+          </div>
+          <p class="quest-note" id="questNote"></p>
+        </article>
+
+        <aside class="panel guide-panel">
+          <div class="section-heading">
+            <div>
+              <span class="step-number">04</span>
+              <h2>遊戲提示</h2>
+            </div>
+          </div>
+          <div class="guide-block">
+            <span>隊長標記</span>
+            <div class="leader-row">
+              <button id="previousLeader" type="button" aria-label="上一位隊長">‹</button>
+              <strong id="leaderName">玩家 1</strong>
+              <button id="nextLeader" type="button" aria-label="下一位隊長">›</button>
+            </div>
+          </div>
+          <div class="guide-block">
+            <span>連續組隊否決</span>
+            <strong class="rejection-count" id="rejectionCount">0 / 5</strong>
+          </div>
+          <div class="guide-block">
+            <span>本局角色組成</span>
+            <div class="mini-roles" id="miniRoles"></div>
+          </div>
+          <button class="text-button full" id="showRules" type="button">查看夜晚流程與規則</button>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="rulesDialog">
+    <button class="dialog-close" id="closeRules" type="button" aria-label="關閉">×</button>
+    <p class="eyebrow">REFERENCE</p>
+    <h2>夜晚流程</h2>
+    <ol>
+      <li><b>邪惡陣營</b>（除奧伯倫）睜眼互認。</li>
+      <li><b>梅林</b>看見邪惡陣營（除莫德雷德）。</li>
+      <li><b>派西維爾</b>看見梅林與莫甘娜，但不知道誰是誰。</li>
+    </ol>
+    <h3>勝利條件</h3>
+    <p>正義完成三次任務後，刺客若成功找出梅林，邪惡仍會逆轉獲勝。邪惡完成三次失敗任務，或連續五次組隊投票未通過，則直接獲勝。</p>
+    <p class="fine-print">7 人以上的第 4 次任務需要至少兩張失敗票才會失敗。</p>
+  </dialog>
+
+  <dialog class="quest-dialog" id="questDialog">
+    <button class="dialog-close" id="closeQuest" type="button" aria-label="關閉">×</button>
+    <section class="quest-step active" id="teamStep">
+      <p class="eyebrow">ASSEMBLE THE QUEST</p>
+      <h2 id="teamStepTitle">選擇出征隊員</h2>
+      <p class="dialog-copy" id="teamStepCopy"></p>
+      <div class="team-options" id="teamOptions"></div>
+      <button class="primary-button" id="confirmTeam" type="button">
+        <span>確認出征名單</span><small>CONFIRM THE PARTY</small>
+      </button>
+    </section>
+    <section class="quest-step" id="votePassStep">
+      <p class="eyebrow">PASS THE DEVICE</p>
+      <div class="seal neutral">✦</div>
+      <p class="turn-count" id="voteTurnCount"></p>
+      <h2>請交給 <em id="voterName"></em></h2>
+      <p class="dialog-copy">確認沒有人看見螢幕後，再選擇你的任務聖杯。</p>
+      <button class="primary-button" id="openVote" type="button">
+        <span>開始秘密選擇</span><small>CAST MY VOTE</small>
+      </button>
+    </section>
+    <section class="quest-step" id="approvalStep">
+      <p class="eyebrow">TEAM APPROVAL</p>
+      <div class="seal neutral">✦</div>
+      <h2>確認組隊表決</h2>
+      <p class="dialog-copy">請先在現場舉手統計。完成後，只需記錄本次組隊是否通過。</p>
+      <div class="approval-options">
+        <button class="approval-button approve" data-proposal="approve" type="button">
+          <span>✓</span><b>組隊通過</b><small>APPROVED</small>
+        </button>
+        <button class="approval-button reject" data-proposal="reject" type="button">
+          <span>×</span><b>組隊未通過</b><small>REJECTED</small>
+        </button>
+      </div>
+    </section>
+    <section class="quest-step" id="chaliceStep">
+      <p class="eyebrow">CHOOSE YOUR CHALICE</p>
+      <h2 id="chaliceVoter"></h2>
+      <p class="dialog-copy">點選一只聖杯。選擇完成後，請立即將裝置交回。</p>
+      <div class="chalice-options">
+        <button class="chalice success" data-vote="success" type="button">
+          <span class="cup">♜</span><b>成功之盃</b><small>SUCCESS</small>
+        </button>
+        <button class="chalice failure" data-vote="failure" type="button">
+          <span class="cup">♞</span><b>失敗之盃</b><small>FAILURE</small>
+        </button>
+      </div>
+      <p class="vote-warning" id="voteWarning"></p>
+    </section>
+    <section class="quest-step" id="questSealedStep">
+      <p class="eyebrow">THE CHALICES ARE SEALED</p>
+      <div class="seal neutral">✦</div>
+      <h2>所有聖杯已收齊</h2>
+      <p class="dialog-copy">結果仍未公開。確認所有玩家都準備好後，再按下公布。</p>
+      <button class="primary-button" id="revealQuestResult" type="button">
+        <span>公布任務結果</span><small>REVEAL THE VERDICT</small>
+      </button>
+    </section>
+    <section class="quest-step" id="questResultStep">
+      <p class="eyebrow">THE VERDICT</p>
+      <div class="seal" id="resultSeal">♜</div>
+      <h2 id="questResultTitle"></h2>
+      <p class="result-tally" id="resultTally"></p>
+      <button class="primary-button" id="finishQuest" type="button">
+        <span>記錄結果</span><small>RETURN TO THE BOARD</small>
+      </button>
+    </section>
+  </dialog>
+
+  <dialog class="quest-dialog" id="assassinationDialog">
+    <button class="dialog-close" id="closeAssassination" type="button" aria-label="關閉">×</button>
+    <section class="assassination-step active" id="assassinationPickStep">
+      <p class="eyebrow">THE FINAL ASSASSINATION</p>
+      <div class="seal evil">†</div>
+      <h2>刺客，請指認梅林</h2>
+      <p class="dialog-copy">選擇一位玩家。確認刺殺後將立即公布最終勝負。</p>
+      <div class="assassination-options" id="assassinationOptions"></div>
+      <p class="selected-target" id="selectedTarget">尚未選擇目標</p>
+      <button class="primary-button" id="confirmAssassination" type="button" disabled>
+        <span>確認刺殺</span><small>CONFIRM THE TARGET</small>
+      </button>
+    </section>
+    <section class="assassination-step" id="assassinationResultStep">
+      <p class="eyebrow">THE FINAL VERDICT</p>
+      <div class="seal" id="assassinationResultSeal">†</div>
+      <h2 id="assassinationResultTitle"></h2>
+      <p class="result-tally" id="assassinationResultText"></p>
+      <button class="primary-button" id="finishAssassination" type="button">
+        <span>回到遊戲紀錄</span><small>VIEW THE FINAL BOARD</small>
+      </button>
+    </section>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
