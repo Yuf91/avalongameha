@@ -1,6 +1,7 @@
 # 阿瓦隆
 
 可離線使用的阿瓦隆角色抽籤與任務紀錄網站，純 HTML／CSS／JavaScript，不需要安裝套件或連上外部服務。
+https://yuf91.github.io/avalongameha/
 
 ## 使用方式
 
