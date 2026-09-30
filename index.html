@@ -3,316 +3,439 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#09111f">
+  <meta name="theme-color" content="#040a14">
   <meta name="description" content="可離線使用的阿瓦隆角色抽籤與任務紀錄工具">
-  <title>亞瑟王的密令｜阿瓦隆抽籤</title>
+  <title>阿瓦隆</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
+  <div class="bg-fx" aria-hidden="true"><div class="floor"></div></div>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+    <symbol id="i-sword" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></symbol>
+    <symbol id="i-skull" viewBox="0 0 24 24"><path d="M15 22a1 1 0 0 0 1-1v-1a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20v1a1 1 0 0 0 1 1z"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="12" r="1"/><path d="m12.5 17-.5-1-.5 1z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-17.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></symbol>
+    <symbol id="i-volume-x" viewBox="0 0 24 24"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-chalice" viewBox="0 0 24 24"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></symbol>
+    <symbol id="i-swords" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/><path d="m5 14 4 4"/><path d="m7 17-3 3"/><path d="m3 19 2 2"/></symbol>
+    <symbol id="i-excalibur" viewBox="0 0 24 24"><path d="M12 2 14 5v11h-4V5z"/><path d="M7 16h10"/><path d="M12 16v4"/><circle cx="12" cy="21.5" r="1"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  </svg>
 
   <header class="topbar">
-    <a class="brand" href="#" aria-label="回到設定">
-      <span class="brand-mark">A</span>
-      <span>
-        <strong>亞瑟王的密令</strong>
-        <small>AVALON COMPANION</small>
-      </span>
+    <a class="brand" href="#" aria-label="阿瓦隆，回到設定">
+      <img class="brand-mark" src="icon.svg" alt="" width="36" height="36">
+      <strong>阿瓦隆</strong>
     </a>
     <div class="topbar-actions">
-      <button class="icon-button" id="themeToggle" type="button" aria-label="切換淺色模式" title="切換淺色模式">
-        <span aria-hidden="true">☀</span>
+      <button class="icon-button" id="showRules" type="button" aria-label="規則" title="規則">
+        <svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg>
       </button>
-      <button class="icon-button" id="soundToggle" type="button" aria-label="切換音效" title="切換音效">
-        <span aria-hidden="true">♪</span>
+      <button class="icon-button" id="themeToggle" type="button" aria-label="切換淺色模式" title="切換淺色模式">
+        <svg class="icon" aria-hidden="true"><use href="#i-sun"></use></svg>
+      </button>
+      <button class="icon-button" id="soundToggle" type="button" aria-label="音效" aria-pressed="true" title="音效">
+        <svg class="icon" aria-hidden="true"><use href="#i-volume"></use></svg>
       </button>
     </div>
   </header>
 
   <main class="app-shell">
+    <!-- ========== Setup wizard ========== -->
     <section class="screen active" id="setupScreen">
-      <div class="hero">
-        <p class="eyebrow">THE RESISTANCE · AVALON</p>
-        <h1>忠誠藏於誓言，<br><em>真相隱於目光。</em></h1>
-        <p class="hero-copy">設定玩家與角色，將裝置依序傳遞。所有資料只留在這台裝置上。</p>
+      <div class="resume-card hidden" id="resumeCard">
+        <div>
+          <b>上一局尚未結束</b>
+          <span id="resumeInfo"></span>
+        </div>
+        <div class="resume-actions">
+          <button class="ghost-button small" id="discardGame" type="button">捨棄</button>
+          <button class="primary-button small" id="resumeGame" type="button">繼續</button>
+        </div>
       </div>
 
-      <div class="setup-grid">
-        <article class="panel player-panel">
-          <div class="section-heading">
-            <div>
-              <span class="step-number">01</span>
-              <h2>召集圓桌</h2>
-            </div>
-            <span class="count-badge"><b id="playerCountLabel">5</b> 位玩家</span>
+      <ol class="stepper" id="stepper" aria-label="設定步驟">
+        <li><button type="button" data-goto="0"><span>1</span>人數</button></li>
+        <li><button type="button" data-goto="1"><span>2</span>玩家</button></li>
+        <li><button type="button" data-goto="2"><span>3</span>角色</button></li>
+      </ol>
+
+      <section class="setup-step active" data-step="0">
+        <h1 class="step-title" tabindex="-1">幾位玩家？</h1>
+        <div class="counter" role="group" aria-label="玩家人數">
+          <button class="round-button" id="decreasePlayers" type="button" aria-label="減少玩家">−</button>
+          <output id="playerCount" aria-live="polite">5</output>
+          <button class="round-button" id="increasePlayers" type="button" aria-label="增加玩家">＋</button>
+        </div>
+        <div class="faction-split">
+          <div class="faction-tile good">
+            <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
+            <b id="goodCount">3</b><span>忠誠</span>
           </div>
-
-          <div class="counter" aria-label="玩家人數">
-            <button id="decreasePlayers" type="button" aria-label="減少玩家">−</button>
-            <div>
-              <strong id="playerCount">5</strong>
-              <span>PLAYERS</span>
-            </div>
-            <button id="increasePlayers" type="button" aria-label="增加玩家">＋</button>
+          <div class="faction-tile evil">
+            <svg class="icon" aria-hidden="true"><use href="#i-skull"></use></svg>
+            <b id="evilCount">2</b><span>邪惡</span>
           </div>
+        </div>
+        <div class="quest-preview">
+          <span class="label">各局任務人數</span>
+          <div class="quest-preview-row" id="questPreview"></div>
+        </div>
+      </section>
 
-          <div class="faction-balance">
-            <div class="faction good">
-              <span class="faction-icon">♜</span>
-              <span><b id="goodCount">3</b> 忠誠陣營</span>
-            </div>
-            <div class="balance-bar"><i id="balanceFill"></i></div>
-            <div class="faction evil">
-              <span><b id="evilCount">2</b> 邪惡陣營</span>
-              <span class="faction-icon">♞</span>
-            </div>
-          </div>
+      <section class="setup-step" data-step="1">
+        <h1 class="step-title" tabindex="-1">玩家名稱</h1>
+        <p class="step-hint">依座位順序填寫，抽籤時將依此順序傳遞裝置。</p>
+        <div class="name-list" id="nameList"></div>
+        <p class="field-error" id="nameError" role="alert"></p>
+      </section>
 
-          <div class="name-heading">
-            <span>玩家順序與名稱</span>
-            <small>將按照 01、02、03 的順序發牌</small>
-          </div>
-          <div class="name-list" id="nameList"></div>
-        </article>
+      <section class="setup-step" data-step="2">
+        <div class="step-head">
+          <h1 class="step-title" tabindex="-1">選擇角色</h1>
+          <button class="text-button" id="resetRoles" type="button">推薦配置</button>
+        </div>
+        <h2 class="role-label good">忠誠陣營 <span id="goodSlots"></span></h2>
+        <div class="role-grid" id="goodRoles"></div>
+        <h2 class="role-label evil">邪惡陣營 <span id="evilSlots"></span></h2>
+        <div class="role-grid" id="evilRoles"></div>
+        <h2 class="role-label rule">特殊規則</h2>
+        <div class="role-grid">
+          <label class="role-option rule">
+            <input type="checkbox" id="ladyToggle">
+            <span class="role-art"><svg class="icon" aria-hidden="true"><use href="#i-waves"></use></svg></span>
+            <b>湖中女神</b>
+            <small>第 2–4 局後查驗陣營</small>
+            <span class="role-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>
+          </label>
+          <label class="role-option rule">
+            <input type="checkbox" id="lancelotToggle">
+            <span class="role-art"><svg class="icon" aria-hidden="true"><use href="#i-swords"></use></svg></span>
+            <b>蘭斯洛特</b>
+            <small>忠邪各一，可能倒戈</small>
+            <span class="role-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>
+          </label>
+          <label class="role-option rule">
+            <input type="checkbox" id="excaliburToggle">
+            <span class="role-art"><svg class="icon" aria-hidden="true"><use href="#i-excalibur"></use></svg></span>
+            <b>王者之劍</b>
+            <small>可翻轉一張任務票</small>
+            <span class="role-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>
+          </label>
+        </div>
+        <p class="role-summary" id="roleSummary" role="status"></p>
+      </section>
 
-        <article class="panel roles-panel">
-          <div class="section-heading">
-            <div>
-              <span class="step-number">02</span>
-              <h2>選擇角色</h2>
-            </div>
-            <button class="text-button" id="resetRoles" type="button">推薦配置</button>
-          </div>
-
-          <div class="role-section">
-            <p class="role-label good-label">忠誠陣營 <span>GOOD</span></p>
-            <div class="role-options" id="goodRoles"></div>
-          </div>
-
-          <div class="ornament"><span>✦</span></div>
-
-          <div class="role-section">
-            <p class="role-label evil-label">邪惡陣營 <span>EVIL</span></p>
-            <div class="role-options" id="evilRoles"></div>
-          </div>
-
-          <div class="role-summary" id="roleSummary"></div>
-        </article>
-      </div>
-
-      <div class="start-wrap">
-        <button class="primary-button" id="startGame" type="button">
-          <span>開始命運抽籤</span>
-          <small>BEGIN THE QUEST</small>
-        </button>
-        <p id="setupMessage" role="status"></p>
-      </div>
-    </section>
-
-    <section class="screen" id="passScreen">
-      <div class="ritual-card">
-        <p class="eyebrow">PASS THE DEVICE</p>
-        <div class="seal neutral">✦</div>
-        <p class="turn-count" id="turnCount">第 1 位／共 5 位</p>
-        <h2>請交給 <em id="currentPlayerName">玩家 1</em></h2>
-        <p>確認周圍沒有人看見螢幕後，再揭示你的身分。</p>
-        <button class="primary-button" id="revealRole" type="button">
-          <span>揭示我的身分</span>
-          <small>REVEAL MY DESTINY</small>
-        </button>
+      <div class="action-bar">
+        <button class="ghost-button" id="prevStep" type="button">上一步</button>
+        <button class="primary-button" id="nextStep" type="button">下一步</button>
       </div>
     </section>
 
-    <section class="screen" id="roleScreen">
-      <div class="role-reveal" id="roleReveal">
-        <p class="eyebrow">YOUR DESTINY</p>
-        <div class="seal" id="roleSeal">♜</div>
-        <p class="faction-title" id="factionTitle">忠誠陣營</p>
-        <h2 id="revealedRole">梅林</h2>
+    <!-- ========== Card reveal ========== -->
+    <section class="screen" id="revealScreen">
+      <div class="reveal-progress" id="revealProgress" aria-hidden="true"></div>
+      <p class="turn-count" id="turnCount"></p>
+      <h1 class="pass-title" tabindex="-1">請交給 <em id="currentPlayerName"></em></h1>
+
+      <div class="flip-card" id="flipCard">
+        <div class="flip-inner">
+          <div class="card-face card-back">
+            <span class="reticle" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="card-back-label">點擊解鎖身分</span>
+          </div>
+          <div class="card-face card-front" id="cardFront" aria-hidden="true">
+            <span class="card-faction" id="cardFaction"></span>
+            <span class="card-emblem"><svg class="icon" aria-hidden="true"><use id="cardIcon" href="#i-shield"></use></svg></span>
+            <b class="card-name" id="cardName"></b>
+            <span class="card-subtitle" id="cardSubtitle"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-info" id="revealInfo" hidden>
         <p class="role-power" id="rolePower"></p>
-        <div class="knowledge-card">
+        <div class="knowledge">
           <span>你所知道的情報</span>
           <p id="roleKnowledge"></p>
         </div>
-        <button class="primary-button" id="hideRole" type="button">
-          <span>我已記住，隱藏身分</span>
-          <small>CONCEAL &amp; CONTINUE</small>
-        </button>
+      </div>
+      <p class="reveal-hint" id="revealHint">確認周圍沒有人看見螢幕後再翻牌。</p>
+
+      <div class="action-bar single">
+        <button class="primary-button" id="revealAction" type="button">翻開身分牌</button>
       </div>
     </section>
 
+    <!-- ========== Game board ========== -->
     <section class="screen" id="gameScreen">
-      <div class="game-header">
-        <div>
-          <p class="eyebrow">THE QUEST BEGINS</p>
-          <h1>圓桌任務</h1>
+      <h1 class="visually-hidden" tabindex="-1">任務紀錄</h1>
+      <div class="scoreboard">
+        <div class="score-side good">
+          <span>忠誠</span>
+          <b id="goodScore">0</b>
         </div>
-        <button class="outline-button" id="newGame" type="button">重新開局</button>
+        <span class="score-divider">先達 3 勝</span>
+        <div class="score-side evil">
+          <b id="evilScore">0</b>
+          <span>邪惡</span>
+        </div>
       </div>
 
-      <div class="game-grid">
-        <article class="panel quest-panel">
-          <div class="section-heading">
-            <div>
-              <span class="step-number">03</span>
-              <h2>任務紀錄</h2>
-            </div>
-            <span class="score" id="scoreText">正義 0 · 邪惡 0</span>
-          </div>
-          <div class="quest-track" id="questTrack"></div>
-          <div class="quest-actions" id="questActions">
-            <button class="primary-button quest-vote-button" id="startQuestVote" type="button">
-              <span>開始任務投票</span>
-              <small>CHOOSE THE CHALICE</small>
-            </button>
-            <button class="primary-button quest-vote-button hidden" id="startAssassination" type="button">
-              <span>刺客指認梅林</span>
-              <small>ASSASSINATE MERLIN</small>
-            </button>
-          </div>
-          <p class="quest-note" id="questNote"></p>
-        </article>
+      <ol class="quest-track" id="questTrack" aria-label="任務進度"></ol>
 
-        <aside class="panel guide-panel">
-          <div class="section-heading">
-            <div>
-              <span class="step-number">04</span>
-              <h2>遊戲提示</h2>
-            </div>
+      <article class="quest-card" id="questCard">
+        <p class="quest-kicker" id="questKicker"></p>
+        <h2 class="quest-headline" id="questHeadline"></h2>
+        <p class="quest-note" id="questNote"></p>
+        <button class="primary-button" id="startQuestVote" type="button">開始組隊</button>
+        <button class="primary-button hidden" id="startLady" type="button">使用湖中女神</button>
+        <button class="primary-button hidden" id="drawLoyalty" type="button">翻開忠誠牌</button>
+        <button class="primary-button danger hidden" id="startAssassination" type="button">刺客指認梅林</button>
+        <button class="primary-button hidden" id="playAgain" type="button">再來一局</button>
+      </article>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <span class="label">目前隊長</span>
+          <div class="leader-row">
+            <button class="round-button sm" id="previousLeader" type="button" aria-label="上一位隊長">
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg>
+            </button>
+            <strong id="leaderName" aria-live="polite"></strong>
+            <button class="round-button sm" id="nextLeader" type="button" aria-label="下一位隊長">
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+            </button>
           </div>
-          <div class="guide-block">
-            <span>隊長標記</span>
-            <div class="leader-row">
-              <button id="previousLeader" type="button" aria-label="上一位隊長">‹</button>
-              <strong id="leaderName">玩家 1</strong>
-              <button id="nextLeader" type="button" aria-label="下一位隊長">›</button>
-            </div>
-          </div>
-          <div class="guide-block">
-            <span>連續組隊否決</span>
-            <strong class="rejection-count" id="rejectionCount">0 / 5</strong>
-          </div>
-          <div class="guide-block">
-            <span>本局角色組成</span>
-            <div class="mini-roles" id="miniRoles"></div>
-          </div>
-          <button class="text-button full" id="showRules" type="button">查看夜晚流程與規則</button>
-        </aside>
+        </div>
+        <div class="info-card">
+          <span class="label">連續否決 <b id="rejectionCount">0 / 5</b></span>
+          <div class="reject-pips" id="rejectPips" aria-hidden="true"></div>
+        </div>
       </div>
+
+      <div class="info-card lady-card hidden" id="ladyCard">
+        <span class="label">湖中女神</span>
+        <div class="lady-holder">
+          <svg class="icon" aria-hidden="true"><use href="#i-waves"></use></svg>
+          <strong id="ladyHolderName"></strong>
+        </div>
+        <p class="lady-history" id="ladyHistory"></p>
+      </div>
+
+      <div class="info-card lady-card hidden" id="lancelotCard">
+        <span class="label">蘭斯洛特忠誠牌</span>
+        <div class="lady-holder">
+          <svg class="icon" aria-hidden="true"><use href="#i-swords"></use></svg>
+          <strong id="lancelotState"></strong>
+        </div>
+        <p class="lady-history" id="lancelotHistory"></p>
+      </div>
+
+      <div class="info-card">
+        <span class="label" id="rosterLabel">本局角色</span>
+        <div class="roster" id="roster"></div>
+      </div>
+
+      <button class="ghost-button full" id="newGame" type="button">
+        <svg class="icon" aria-hidden="true"><use href="#i-rotate"></use></svg>重新開局
+      </button>
     </section>
   </main>
 
-  <dialog id="rulesDialog">
-    <button class="dialog-close" id="closeRules" type="button" aria-label="關閉">×</button>
-    <p class="eyebrow">REFERENCE</p>
-    <h2>夜晚流程</h2>
-    <ol>
+  <!-- ========== Rules ========== -->
+  <dialog id="rulesDialog" aria-labelledby="rulesTitle">
+    <button class="dialog-close" data-close type="button" aria-label="關閉">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
+    <h2 id="rulesTitle">夜晚流程</h2>
+    <ol class="rules-list">
       <li><b>邪惡陣營</b>（除奧伯倫）睜眼互認。</li>
       <li><b>梅林</b>看見邪惡陣營（除莫德雷德）。</li>
       <li><b>派西維爾</b>看見梅林與莫甘娜，但不知道誰是誰。</li>
     </ol>
     <h3>勝利條件</h3>
     <p>正義完成三次任務後，刺客若成功找出梅林，邪惡仍會逆轉獲勝。邪惡完成三次失敗任務，或連續五次組隊投票未通過，則直接獲勝。</p>
+    <h3>湖中女神（選用規則）</h3>
+    <p>開局時由隊長右手邊的玩家持有。第 2、3、4 局任務結束後，持有者秘密查驗一位玩家的陣營，再把湖中女神交給對方。曾持有過的玩家不能被查驗；持有者可以公開宣布結果，也可以說謊。</p>
+    <h3>蘭斯洛特（選用規則）</h3>
+    <p>加入忠誠與邪惡兩位蘭斯洛特。邪惡蘭斯洛特與邪惡陣營互認，梅林也看得見他。忠誠牌共 5 張（3 張不變、2 張轉換），第 3、4、5 局開始前各公開翻一張；翻到轉換時，兩位蘭斯洛特交換陣營，之後依新陣營投票與計算勝負。</p>
+    <h3>王者之劍（選用規則）</h3>
+    <p>組隊時隊長把王者之劍交給一位隊員（不能給自己）。所有任務票投完後，持有者可以秘密翻轉另一位隊員的票（成功↔失敗），並看到那張票原本的內容。是否使用、對誰使用會公開。</p>
     <p class="fine-print">7 人以上的第 4 次任務需要至少兩張失敗票才會失敗。</p>
   </dialog>
 
-  <dialog class="quest-dialog" id="questDialog">
-    <button class="dialog-close" id="closeQuest" type="button" aria-label="關閉">×</button>
+  <!-- ========== Quest flow ========== -->
+  <dialog class="sheet" id="questDialog" aria-labelledby="teamStepTitle">
+    <button class="dialog-close" id="closeQuest" type="button" aria-label="關閉">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
+
     <section class="quest-step active" id="teamStep">
-      <p class="eyebrow">ASSEMBLE THE QUEST</p>
       <h2 id="teamStepTitle">選擇出征隊員</h2>
       <p class="dialog-copy" id="teamStepCopy"></p>
-      <div class="team-options" id="teamOptions"></div>
-      <button class="primary-button" id="confirmTeam" type="button">
-        <span>確認出征名單</span><small>CONFIRM THE PARTY</small>
-      </button>
+      <div class="chip-grid" id="teamOptions"></div>
+      <button class="primary-button" id="confirmTeam" type="button">確認出征名單</button>
     </section>
-    <section class="quest-step" id="votePassStep">
-      <p class="eyebrow">PASS THE DEVICE</p>
-      <div class="seal neutral">✦</div>
-      <p class="turn-count" id="voteTurnCount"></p>
-      <h2>請交給 <em id="voterName"></em></h2>
-      <p class="dialog-copy">確認沒有人看見螢幕後，再選擇你的任務聖杯。</p>
-      <button class="primary-button" id="openVote" type="button">
-        <span>開始秘密選擇</span><small>CAST MY VOTE</small>
-      </button>
+
+    <section class="quest-step" id="excaliburGiveStep">
+      <div class="pass-icon" aria-hidden="true"><svg class="icon"><use href="#i-excalibur"></use></svg></div>
+      <h2 id="excaliburGiveTitle">交出王者之劍</h2>
+      <p class="dialog-copy">隊長將王者之劍交給一位隊員（不能給自己）。</p>
+      <div class="chip-grid" id="excaliburOptions"></div>
+      <button class="primary-button" id="confirmExcalibur" type="button" disabled>確認</button>
     </section>
+
     <section class="quest-step" id="approvalStep">
-      <p class="eyebrow">TEAM APPROVAL</p>
-      <div class="seal neutral">✦</div>
-      <h2>確認組隊表決</h2>
-      <p class="dialog-copy">請先在現場舉手統計。完成後，只需記錄本次組隊是否通過。</p>
-      <div class="approval-options">
-        <button class="approval-button approve" data-proposal="approve" type="button">
-          <span>✓</span><b>組隊通過</b><small>APPROVED</small>
+      <h2>組隊表決結果</h2>
+      <p class="dialog-copy">現場舉手表決後，記錄是否通過。</p>
+      <div class="choice-cards">
+        <button class="choice-card good" data-proposal="approve" type="button">
+          <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><b>通過</b>
         </button>
-        <button class="approval-button reject" data-proposal="reject" type="button">
-          <span>×</span><b>組隊未通過</b><small>REJECTED</small>
+        <button class="choice-card evil" data-proposal="reject" type="button">
+          <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg><b>未通過</b>
         </button>
       </div>
     </section>
+
+    <section class="quest-step" id="votePassStep">
+      <div class="pass-icon" aria-hidden="true"><svg class="icon"><use href="#i-phone"></use></svg></div>
+      <p class="turn-count" id="voteTurnCount"></p>
+      <h2>請交給 <em id="voterName"></em></h2>
+      <p class="dialog-copy">確認沒有人看見螢幕後再投票。</p>
+      <button class="primary-button" id="openVote" type="button">開始秘密投票</button>
+    </section>
+
     <section class="quest-step" id="chaliceStep">
-      <p class="eyebrow">CHOOSE YOUR CHALICE</p>
       <h2 id="chaliceVoter"></h2>
-      <p class="dialog-copy">點選一只聖杯。選擇完成後，請立即將裝置交回。</p>
-      <div class="chalice-options">
-        <button class="chalice success" data-vote="success" type="button">
-          <span class="cup">♜</span><b>成功之盃</b><small>SUCCESS</small>
+      <p class="dialog-copy">選擇後請立即將裝置交回。</p>
+      <div class="choice-cards tall">
+        <button class="choice-card good" data-vote="success" type="button">
+          <svg class="icon" aria-hidden="true"><use href="#i-chalice"></use></svg><b>成功</b>
         </button>
-        <button class="chalice failure" data-vote="failure" type="button">
-          <span class="cup">♞</span><b>失敗之盃</b><small>FAILURE</small>
+        <button class="choice-card evil" data-vote="failure" type="button">
+          <svg class="icon" aria-hidden="true"><use href="#i-skull"></use></svg><b>失敗</b>
         </button>
       </div>
       <p class="vote-warning" id="voteWarning"></p>
     </section>
-    <section class="quest-step" id="questSealedStep">
-      <p class="eyebrow">THE CHALICES ARE SEALED</p>
-      <div class="seal neutral">✦</div>
-      <h2>所有聖杯已收齊</h2>
-      <p class="dialog-copy">結果仍未公開。確認所有玩家都準備好後，再按下公布。</p>
-      <button class="primary-button" id="revealQuestResult" type="button">
-        <span>公布任務結果</span><small>REVEAL THE VERDICT</small>
-      </button>
+
+    <section class="quest-step" id="excaliburPassStep">
+      <div class="pass-icon" aria-hidden="true"><svg class="icon"><use href="#i-excalibur"></use></svg></div>
+      <h2 id="excaliburPassTitle">請交給 <em id="excaliburHolderName"></em></h2>
+      <p class="dialog-copy">你持有王者之劍，可以秘密翻轉另一位隊員的任務票。</p>
+      <button class="primary-button" id="openExcalibur" type="button">開始</button>
     </section>
+
+    <section class="quest-step" id="excaliburUseStep">
+      <h2 id="excaliburUseTitle">要使用王者之劍嗎？</h2>
+      <p class="dialog-copy">選擇一位隊員翻轉他的票，你會看到那張票原本的內容。</p>
+      <div class="chip-grid" id="excaliburTargets"></div>
+      <button class="primary-button" id="useExcalibur" type="button" disabled>翻轉這張票</button>
+      <button class="ghost-button full" id="skipExcalibur" type="button">不使用</button>
+    </section>
+
+    <section class="quest-step" id="excaliburResultStep">
+      <div class="pass-icon" id="excaliburResultIcon" aria-hidden="true"><svg class="icon"><use href="#i-repeat"></use></svg></div>
+      <p class="turn-count" id="excaliburResultWho"></p>
+      <h2 class="result-title" id="excaliburResultTitle"></h2>
+      <p class="dialog-copy" id="excaliburResultCopy"></p>
+      <button class="primary-button" id="finishExcalibur" type="button">完成，交回裝置</button>
+    </section>
+
+    <section class="quest-step" id="questSealedStep">
+      <div class="pass-icon" aria-hidden="true"><svg class="icon"><use href="#i-chalice"></use></svg></div>
+      <h2>所有票已收齊</h2>
+      <p class="dialog-copy">確認所有玩家都準備好後，再公布結果。</p>
+      <button class="primary-button" id="revealQuestResult" type="button">公布任務結果</button>
+    </section>
+
     <section class="quest-step" id="questResultStep">
-      <p class="eyebrow">THE VERDICT</p>
-      <div class="seal" id="resultSeal">♜</div>
-      <h2 id="questResultTitle"></h2>
+      <div class="vote-reveal" id="voteReveal" aria-hidden="true"></div>
+      <h2 class="result-title" id="questResultTitle"></h2>
       <p class="result-tally" id="resultTally"></p>
-      <button class="primary-button" id="finishQuest" type="button">
-        <span>記錄結果</span><small>RETURN TO THE BOARD</small>
-      </button>
+      <p class="dialog-copy excalibur-note" id="excaliburNote"></p>
+      <button class="primary-button" id="finishQuest" type="button">記錄結果</button>
     </section>
   </dialog>
 
-  <dialog class="quest-dialog" id="assassinationDialog">
-    <button class="dialog-close" id="closeAssassination" type="button" aria-label="關閉">×</button>
+  <!-- ========== Assassination ========== -->
+  <dialog class="sheet" id="assassinationDialog" aria-labelledby="assassinTitle">
+    <button class="dialog-close" data-close type="button" aria-label="關閉">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
     <section class="assassination-step active" id="assassinationPickStep">
-      <p class="eyebrow">THE FINAL ASSASSINATION</p>
-      <div class="seal evil">†</div>
-      <h2>刺客，請指認梅林</h2>
-      <p class="dialog-copy">選擇一位玩家。確認刺殺後將立即公布最終勝負。</p>
-      <div class="assassination-options" id="assassinationOptions"></div>
-      <p class="selected-target" id="selectedTarget">尚未選擇目標</p>
-      <button class="primary-button" id="confirmAssassination" type="button" disabled>
-        <span>確認刺殺</span><small>CONFIRM THE TARGET</small>
-      </button>
+      <div class="pass-icon evil" aria-hidden="true"><svg class="icon"><use href="#i-target"></use></svg></div>
+      <h2 id="assassinTitle">刺客，請指認梅林</h2>
+      <p class="dialog-copy">確認後將立即公布最終勝負。</p>
+      <div class="chip-grid" id="assassinationOptions"></div>
+      <button class="primary-button danger" id="confirmAssassination" type="button" disabled>確認刺殺</button>
     </section>
     <section class="assassination-step" id="assassinationResultStep">
-      <p class="eyebrow">THE FINAL VERDICT</p>
-      <div class="seal" id="assassinationResultSeal">†</div>
-      <h2 id="assassinationResultTitle"></h2>
+      <div class="pass-icon" id="assassinationResultIcon" aria-hidden="true"><svg class="icon"><use href="#i-target"></use></svg></div>
+      <h2 class="result-title" id="assassinationResultTitle"></h2>
       <p class="result-tally" id="assassinationResultText"></p>
-      <button class="primary-button" id="finishAssassination" type="button">
-        <span>回到遊戲紀錄</span><small>VIEW THE FINAL BOARD</small>
-      </button>
+      <button class="primary-button" id="finishAssassination" type="button">查看結果</button>
     </section>
   </dialog>
 
-  <div class="toast" id="toast" role="status"></div>
+  <!-- ========== Lancelot loyalty card ========== -->
+  <dialog class="sheet" id="loyaltyDialog" aria-labelledby="loyaltyTitle">
+    <div class="pass-icon" id="loyaltyIcon" aria-hidden="true"><svg class="icon"><use href="#i-swords"></use></svg></div>
+    <p class="turn-count" id="loyaltyWho"></p>
+    <h2 class="result-title" id="loyaltyTitle"></h2>
+    <p class="dialog-copy" id="loyaltyCopy"></p>
+    <button class="primary-button" data-close type="button">繼續</button>
+  </dialog>
+
+  <!-- ========== Lady of the Lake ========== -->
+  <dialog class="sheet" id="ladyDialog" aria-labelledby="ladyPickTitle">
+    <button class="dialog-close" id="closeLady" type="button" aria-label="關閉">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
+    <section class="lady-step active" id="ladyPickStep">
+      <div class="pass-icon" aria-hidden="true"><svg class="icon"><use href="#i-waves"></use></svg></div>
+      <h2 id="ladyPickTitle"></h2>
+      <p class="dialog-copy">曾持有湖中女神的玩家不能被查驗。</p>
+      <div class="chip-grid" id="ladyOptions"></div>
+      <button class="primary-button" id="confirmLadyTarget" type="button" disabled>確認查驗對象</button>
+    </section>
+    <section class="lady-step" id="ladyPassStep">
+      <div class="pass-icon" aria-hidden="true"><svg class="icon"><use href="#i-phone"></use></svg></div>
+      <h2>只有 <em id="ladyHolderPass"></em> 可以看</h2>
+      <p class="dialog-copy">確認其他人看不到螢幕後，再查看 <b id="ladyTargetName"></b> 的陣營。</p>
+      <button class="primary-button" id="revealLady" type="button">查看陣營</button>
+    </section>
+    <section class="lady-step" id="ladyResultStep">
+      <div class="pass-icon" id="ladyResultIcon" aria-hidden="true"><svg class="icon"><use href="#i-shield"></use></svg></div>
+      <p class="turn-count" id="ladyResultWho"></p>
+      <h2 class="result-title" id="ladyResultTitle"></h2>
+      <p class="dialog-copy">記住後按下完成。你可以公開宣布結果，也可以說謊。</p>
+      <button class="primary-button" id="finishLady" type="button">完成，交出湖中女神</button>
+    </section>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="app.js"></script>
 </body>

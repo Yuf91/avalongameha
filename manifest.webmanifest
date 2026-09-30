@@ -1,18 +1,29 @@
 {
-  "name": "亞瑟王的密令｜阿瓦隆抽籤",
-  "short_name": "阿瓦隆抽籤",
+  "name": "阿瓦隆",
+  "short_name": "阿瓦隆",
   "description": "可離線使用的阿瓦隆角色抽籤與任務紀錄工具",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#070d17",
-  "theme_color": "#09111f",
+  "background_color": "#040a14",
+  "theme_color": "#040a14",
   "lang": "zh-Hant",
   "icons": [
     {
       "src": "icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
   ]
 }
