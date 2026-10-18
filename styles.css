@@ -861,6 +861,9 @@ body.light-theme .score-side b { text-shadow: none; }
 }
 .quest-token { display: grid; justify-items: center; gap: 6px; }
 .token {
+  border: 0;
+  padding: 0;
+  background: transparent;
   position: relative;
   isolation: isolate;
   width: min(60px, 100%);
@@ -907,6 +910,11 @@ body.light-theme .score-side b { text-shadow: none; }
   font-weight: 800;
 }
 .token-size { color: var(--muted); font-family: var(--mono); font-size: 13px; font-weight: 700; }
+.token:disabled { opacity: 1; cursor: default; }
+.token:not(:disabled):hover { filter: brightness(1.2); }
+#historyTeam { overflow-wrap: anywhere; }
+.secret-ballot { color: var(--accent-text); background: var(--surface); }
+.secret-ballot[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 3px; background: var(--accent-soft); }
 
 .quest-card {
   padding: 22px 20px 20px;

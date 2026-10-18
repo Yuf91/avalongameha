@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=19">
+  <link rel="stylesheet" href="styles.css?v=20">
 </head>
 <body>
   <div class="bg-fx" aria-hidden="true"><div class="floor"></div></div>
@@ -328,16 +328,10 @@
 
     <section class="quest-step" id="chaliceStep">
       <h2 id="chaliceVoter"></h2>
-      <p class="dialog-copy">選擇後請立即將裝置交回。</p>
-      <div class="choice-cards tall">
-        <button class="choice-card good" data-vote="success" type="button">
-          <svg class="icon" aria-hidden="true"><use href="#i-chalice"></use></svg><b>成功</b>
-        </button>
-        <button class="choice-card evil" data-vote="failure" type="button">
-          <svg class="icon" aria-hidden="true"><use href="#i-skull"></use></svg><b>失敗</b>
-        </button>
-      </div>
+      <p class="dialog-copy">遮住螢幕，選好一張後按確認，再交回裝置。</p>
+      <div class="choice-cards" id="secretBallots"></div>
       <p class="vote-warning" id="voteWarning"></p>
+      <button class="primary-button full" id="confirmSecretVote" type="button" disabled>確認送出</button>
     </section>
 
     <section class="quest-step" id="excaliburPassStep">
@@ -377,6 +371,16 @@
       <p class="dialog-copy excalibur-note" id="excaliburNote"></p>
       <button class="primary-button" id="finishQuest" type="button">記錄結果</button>
     </section>
+  </dialog>
+
+  <dialog class="sheet" id="questHistoryDialog" aria-labelledby="historyTitle">
+    <button class="dialog-close" data-close type="button" aria-label="關閉"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+    <h2 id="historyTitle"></h2>
+    <h3>出征玩家</h3>
+    <p id="historyTeam"></p>
+    <p class="result-tally" id="historyTally"></p>
+    <p class="dialog-copy excalibur-note" id="historyExcalibur"></p>
+    <button class="primary-button" data-close type="button">關閉紀錄</button>
   </dialog>
 
   <!-- ========== Assassination ========== -->
@@ -437,6 +441,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>

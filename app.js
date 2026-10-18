@@ -76,6 +76,7 @@ const state = {
   busy: false,
   phase: null,
   quests: [],
+  questHistory: [],
   leaderIndex: 0,
   sound: true,
   questTeam: [],
@@ -196,8 +197,10 @@ function bindEvents() {
     button.addEventListener("click", () => recordProposalResult(button.dataset.proposal));
   });
   $("#openVote").addEventListener("click", showChaliceChoice);
-  $$("[data-vote]").forEach((button) => {
-    button.addEventListener("click", () => castQuestVote(button.dataset.vote));
+  $("#confirmSecretVote").addEventListener("click", () => castQuestVote(selectedQuestVote));
+  $("#questTrack").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-quest-history]");
+    if (button) showQuestHistory(Number(button.dataset.questHistory));
   });
   $("#revealQuestResult").addEventListener("click", revealQuestResult);
   $("#finishQuest").addEventListener("click", finishQuestVote);
@@ -456,6 +459,7 @@ function startGame() {
     .map((name, index) => ({ name, role: shuffledRoles[index] }));
   state.revealIndex = 0;
   state.quests = [];
+  state.questHistory = [];
   state.leaderIndex = randomInt(state.playerCount);
   state.rejectedProposals = 0;
   state.assassinationResolved = false;
@@ -698,11 +702,22 @@ function renderQuests(status) {
     const face = result === "success" ? icon("check") : result === "failure" ? icon("x") : index + 1;
     return `
       <li class="quest-token ${result || ""} ${isCurrent ? "current" : ""}" aria-label="第 ${index + 1} 局，${size} 人，${label}${needsTwoFails ? "，需 2 張失敗票" : ""}">
-        <span class="token">${face}${needsTwoFails ? `<i class="two-fail">2</i>` : ""}</span>
+        <button type="button" class="token" data-quest-history="${index}" aria-label="查看第 ${index + 1} 局紀錄" ${result ? "" : "disabled"}>${face}${needsTwoFails ? `<i class="two-fail">2</i>` : ""}</button>
         <span class="token-size">${size} 人</span>
       </li>
     `;
   }).join("");
+}
+
+function showQuestHistory(index) {
+  const result = state.quests[index];
+  if (!result) return;
+  const record = state.questHistory[index];
+  $("#historyTitle").textContent = `第 ${index + 1} 局・任務${result === "success" ? "成功" : "失敗"}`;
+  $("#historyTeam").textContent = record ? record.team.join("、") : "此局為舊版紀錄，未儲存出征名單。";
+  $("#historyTally").textContent = record ? `${record.successes} 張成功 · ${record.failures} 張失敗` : "此局未儲存票數。";
+  $("#historyExcalibur").textContent = record?.excalibur || "";
+  $("#questHistoryDialog").showModal();
 }
 
 function renderQuestCard(status) {
@@ -931,19 +946,37 @@ function prepareQuestVoter() {
   $("#voterName").textContent = voter.name;
 }
 
+let selectedQuestVote = null;
+
 function showChaliceChoice() {
   const voter = state.questTeam[state.questVoterIndex];
   const isGood = factionOf(voter) === "good";
+  selectedQuestVote = null;
   $("#chaliceVoter").textContent = voter.name;
-  $("[data-vote='failure']").disabled = isGood;
-  $("#voteWarning").textContent = isGood ? "忠誠陣營只能投成功票。" : "邪惡陣營可以投成功或失敗。";
+  $("#confirmSecretVote").disabled = true;
+  const ballots = shuffle(isGood ? ["success", "success"] : ["success", "failure"]);
+  $("#secretBallots").innerHTML = ballots.map((vote) => `
+    <button class="choice-card secret-ballot" data-vote="${vote}" type="button" aria-pressed="false">
+      ${icon("chalice")}<b>${vote === "success" ? "成功" : "失敗"}</b>
+    </button>
+  `).join("");
+  $$("#secretBallots button").forEach((button) => button.addEventListener("click", () => {
+    selectedQuestVote = button.dataset.vote;
+    $$("#secretBallots button").forEach((option) => option.setAttribute("aria-pressed", String(option === button)));
+    $("#confirmSecretVote").disabled = false;
+  }));
+  $("#voteWarning").textContent = isGood ? "忠誠陣營的兩張選票皆為成功，任選一張後確認。" : "選票位置每次隨機，請看清楚後選擇。";
   showQuestStep("chaliceStep");
 }
 
 function castQuestVote(vote) {
+  if (currentQuestStep() !== "chaliceStep" || !["success", "failure"].includes(vote)) return;
   const voter = state.questTeam[state.questVoterIndex];
   if (vote === "failure" && factionOf(voter) === "good") return;
   state.questVotes.push(vote);
+  selectedQuestVote = null;
+  $("#secretBallots").replaceChildren();
+  $("#confirmSecretVote").disabled = true;
   state.questVoterIndex += 1;
   tone(500, 0.06);
   vibrate(15);
@@ -987,6 +1020,14 @@ function revealQuestResult() {
 function finishQuestVote() {
   const result = state.pendingQuestResult;
   if (!result) return;
+  const failures = state.questVotes.filter((vote) => vote === "failure").length;
+  state.questHistory[state.quests.length] = {
+    team: state.questTeam.map((player) => player.name),
+    result,
+    successes: state.questVotes.length - failures,
+    failures,
+    excalibur: $("#excaliburNote").textContent
+  };
   state.quests.push(result);
   state.pendingQuestResult = null;
   state.questVotes = [];
@@ -1142,6 +1183,7 @@ function saveGame() {
     revealIndex: state.revealIndex,
     phase: state.phase,
     quests: state.quests,
+    questHistory: state.questHistory,
     leaderIndex: state.leaderIndex,
     rejectedProposals: state.rejectedProposals,
     assassinationResolved: state.assassinationResolved,
@@ -1162,7 +1204,7 @@ function loadGame() {
     const saved = JSON.parse(storageGet(SAVE_KEY) || "null");
     if (saved && Array.isArray(saved.assignments) && saved.assignments.length && QUESTS[saved.playerCount]) {
       return {
-        ladyEnabled: false, ladyHolder: null, ladyHistory: [], ladyUses: [],
+        questHistory: [], ladyEnabled: false, ladyHolder: null, ladyHistory: [], ladyUses: [],
         lancelotEnabled: false, lancelotDeck: [], lancelotDraws: [], excaliburEnabled: false,
         ...saved
       };
