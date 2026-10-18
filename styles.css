@@ -1271,6 +1271,11 @@ dialog p { color: var(--muted); }
   .score-side b { font-size: 36px; }
 }
 
+@media (max-width: 380px) {
+  .topbar-actions { gap: 4px; }
+  .brand strong { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   body::after { display: none; }
   *, *::before, *::after {

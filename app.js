@@ -118,6 +118,11 @@ function storageRemove(key) {
 }
 
 function init() {
+  const pageUrl = new URL(location.href);
+  if (pageUrl.searchParams.has("cache-refresh")) {
+    pageUrl.searchParams.delete("cache-refresh");
+    history.replaceState(null, "", pageUrl);
+  }
   let savedNames = [];
   try { savedNames = JSON.parse(storageGet("avalon-player-names") || "[]"); } catch (_) {}
   state.names = Array.from({ length: 10 }, (_, i) => savedNames[i] || `玩家 ${i + 1}`);
@@ -181,6 +186,7 @@ function bindEvents() {
   });
   $("#soundToggle").addEventListener("click", toggleSound);
   $("#themeToggle").addEventListener("click", toggleTheme);
+  $("#clearCache").addEventListener("click", clearAppCache);
   $(".brand").addEventListener("click", (event) => {
     event.preventDefault();
     if (!$("#setupScreen").classList.contains("active")) backToSetup(state.setupStep);
@@ -1310,6 +1316,40 @@ function tone(frequency, duration) {
 
 function vibrate(ms) {
   if (state.sound && navigator.vibrate) navigator.vibrate(ms);
+}
+
+async function clearAppCache() {
+  const button = $("#clearCache");
+  if (button.disabled) return;
+  button.disabled = true;
+  button.setAttribute("aria-busy", "true");
+  try {
+    // Check the connection before removing the offline copy.
+    if (location.protocol.startsWith("http")) {
+      const response = await fetch(`./index.html?cache-refresh=${Date.now()}`, { cache: "no-store" });
+      if (!response.ok || !new URL(response.url).searchParams.has("cache-refresh")) {
+        throw new Error("Unable to fetch the latest page");
+      }
+    }
+    if (state.phase) saveGame();
+    if ("serviceWorker" in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration("./");
+      if (registration && registration.scope === new URL("./", location.href).href) {
+        await registration.unregister();
+      }
+    }
+    if ("caches" in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter((key) => key.startsWith("avalon-companion-")).map((key) => caches.delete(key)));
+    }
+    const url = new URL(location.href);
+    url.searchParams.set("cache-refresh", Date.now());
+    location.replace(url.href);
+  } catch (_) {
+    showToast("更新失敗，請確認網路連線後再試。遊戲紀錄仍保留。");
+    button.disabled = false;
+    button.removeAttribute("aria-busy");
+  }
 }
 
 function showScreen(id) {
