@@ -962,8 +962,8 @@ function showChaliceChoice() {
   $("#confirmSecretVote").disabled = true;
   const ballots = shuffle(isGood ? ["success", "success"] : ["success", "failure"]);
   $("#secretBallots").innerHTML = ballots.map((vote) => `
-    <button class="choice-card secret-ballot" data-vote="${vote}" type="button" aria-pressed="false">
-      ${icon("chalice")}<b>${vote === "success" ? "成功" : "失敗"}</b>
+    <button class="choice-card secret-ballot ${vote === "failure" ? "evil" : ""}" data-vote="${vote}" type="button" aria-pressed="false">
+      ${icon(vote === "failure" ? "skull" : "chalice")}<b>${vote === "success" ? "成功" : "失敗"}</b>
     </button>
   `).join("");
   $$("#secretBallots button").forEach((button) => button.addEventListener("click", () => {

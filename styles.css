@@ -915,6 +915,7 @@ body.light-theme .score-side b { text-shadow: none; }
 #historyTeam { overflow-wrap: anywhere; }
 .secret-ballot { color: var(--accent-text); background: var(--surface); }
 .secret-ballot[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 3px; background: var(--accent-soft); }
+.secret-ballot.evil[aria-pressed="true"] { outline-color: var(--evil); background: var(--evil-soft); }
 
 .quest-card {
   padding: 22px 20px 20px;
