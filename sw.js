@@ -1,5 +1,5 @@
-const CACHE_NAME = "avalon-companion-v17";
-const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon.svg",
+const CACHE_NAME = "avalon-companion-v18";
+const ASSETS = ["./", "./index.html", "./styles.css?v=18", "./app.js", "./manifest.webmanifest", "./icon.svg",
   "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", (event) => {
